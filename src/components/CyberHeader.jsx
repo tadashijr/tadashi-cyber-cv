@@ -15,7 +15,7 @@ const CyberHeader = () => {
         </div>
         <div className="status-item">
           <span className="status-led green"></span>
-          <span className="neon-text">LVL 42</span>
+          <span className="neon-text">LVL 39</span>
         </div>
         <div className="status-item">
           <span className="status-led blue"></span>
