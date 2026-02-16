@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redirecionando - Tadashi Cyber CV</title>
+  <style>
+    body { 
+      background: #0a0a0f; 
+      color: #00ffff; 
+      font-family: 'Share Tech Mono', monospace; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+      margin: 0;
+      text-align: center;
+    }
+    .container {
+      animation: flicker 2s infinite;
+    }
+    h1 { 
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ffff;
+    }
+    .glitch {
+      animation: glitch 1s infinite;
+    }
+    @keyframes glitch { 
+      0% { text-shadow: 4px 0 #ff00ff, -4px 0 #00ffff; } 
+      25% { text-shadow: -4px 0 #ff00ff, 4px 0 #00ffff; } 
+      50% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
+      75% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
+      100% { text-shadow: 4px 0 #ff00ff, -4px 0 #00ffff; }
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+    .terminal {
+      border: 2px solid #00ffff;
+      padding: 20px;
+      margin-top: 20px;
+      background: rgba(0, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="glitch">⚠️ ACESSANDO MAINFRAME ⚠️</h1>
+    <div class="terminal">
+      <p>> Redirecionando para o sistema principal...</p>
+      <p>> Por favor, aguarde...</p>
+      <p id="countdown">3</p>
+    </div>
+    <script>
+      let count = 3;
+      const countdownEl = document.getElementById('countdown');
+      
+      const interval = setInterval(() => {
+        count--;
+        countdownEl.textContent = count;
+        
+        if (count === 0) {
+          clearInterval(interval);
+          window.location.href = '/tadashi-cyber-cv/';
+        }
+      }, 1000);
+    </script>
+  </div>
+</body>
+</html>
