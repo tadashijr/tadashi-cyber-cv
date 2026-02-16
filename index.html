@@ -4,54 +4,701 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tadashi Suto - Cyberpunk CV</title>
+  
+  <!-- React e ReactDOM via CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel para JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Fontes cyberpunk -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0a0f; color: #00ffff; font-family: 'Courier New', monospace; overflow: hidden; }
-    .container { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-    .glitch { font-size: 3rem; text-align: center; animation: glitch 3s infinite; margin-bottom: 20px; }
-    @keyframes glitch { 0% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; } 50% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; } }
-    .terminal { border: 2px solid #00ffff; padding: 30px; max-width: 600px; width: 100%; box-shadow: 0 0 30px #00ffff; }
-    .line { margin: 10px 0; border-right: 2px solid #00ffff; white-space: nowrap; overflow: hidden; animation: typing 3s steps(40) 1s forwards, blink 1s infinite; width: 0; }
-    @keyframes typing { from { width: 0; } to { width: 100%; } }
-    @keyframes blink { 50% { border-color: transparent; } }
-    .button { margin-top: 30px; padding: 15px 40px; border: 2px solid #ff00ff; background: transparent; color: #ff00ff; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
-    .button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 30px #ff00ff; }
-    .hidden { display: none; }
-    .content { margin-top: 30px; padding: 20px; border: 1px solid #00ffff; background: rgba(0,255,255,0.1); }
-    .scanline { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 50%, rgba(0,255,255,0.03) 50%); background-size: 100% 4px; pointer-events: none; animation: scan 8s linear infinite; }
-    @keyframes scan { from { background-position: 0 0; } to { background-position: 0 100%; } }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      background: #0a0a0f;
+      color: #00ffff;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+      background: #0a0a0f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00ffff;
+      box-shadow: 0 0 10px #00ffff;
+      border-radius: 4px;
+    }
+
+    /* Container principal */
+    .cyberpunk-wrapper {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #000000 0%, #0a0a1f 100%);
+      overflow: hidden;
+    }
+
+    /* Efeitos de tela */
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 255, 0.03) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      animation: scan 8s linear infinite;
+      z-index: 9999;
+    }
+
+    @keyframes scan {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100%; }
+    }
+
+    .crt-effect::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    .matrix-rain {
+      position: fixed;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg, 
+        rgba(0, 255, 255, 0.02) 0px, 
+        transparent 2px, 
+        rgba(0, 255, 255, 0.02) 4px,
+        transparent 6px);
+      animation: matrix 20s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes matrix {
+      from { transform: translateY(0); }
+      to { transform: translateY(100%); }
+    }
+
+    /* Main content */
+    .cyber-main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Header Cyberpunk */
+    .cyber-header {
+      text-align: center;
+      margin: 30px 0;
+      padding: 20px;
+      border: 2px solid #00ffff;
+      background: rgba(0, 255, 255, 0.02);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      animation: borderPulse 3s infinite;
+    }
+
+    @keyframes borderPulse {
+      0%, 100% { border-color: #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
+      50% { border-color: #ff00ff; box-shadow: 0 0 40px rgba(255, 0, 255, 0.3); }
+    }
+
+    .glitch {
+      font-size: 4rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      position: relative;
+      color: white;
+      letter-spacing: 5px;
+      animation: glitch-skew 4s infinite;
+    }
+
+    @media (max-width: 768px) {
+      .glitch { font-size: 2.2rem; }
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .glitch::before {
+      animation: glitch-anim 3s infinite linear alternate-reverse;
+      color: #ff00ff;
+      z-index: -1;
+    }
+
+    .glitch::after {
+      animation: glitch-anim2 2s infinite linear alternate-reverse;
+      color: #00ffff;
+      z-index: -2;
+    }
+
+    @keyframes glitch-anim {
+      0% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 2px); }
+      20% { clip-path: inset(50% 0 10% 0); transform: translate(2px, -2px); }
+      40% { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 2px); }
+      60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+      80% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 2px); }
+      100% { clip-path: inset(70% 0 15% 0); transform: translate(2px, -2px); }
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 25px 0;
+      flex-wrap: wrap;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 255, 255, 0.1);
+      padding: 8px 16px;
+      border: 1px solid #00ffff;
+      border-radius: 4px;
+    }
+
+    .status-led {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    .status-led.red { background: #ff0000; box-shadow: 0 0 10px #ff0000; }
+    .status-led.green { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
+    .status-led.blue { background: #00ffff; box-shadow: 0 0 10px #00ffff; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .neon-text {
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+    }
+
+    .title-container {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .cyber-title {
+      color: #ff00ff;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px #ff00ff;
+      border: 1px solid #ff00ff;
+      padding: 5px 15px;
+      background: rgba(255, 0, 255, 0.05);
+    }
+
+    /* Terminal */
+    .terminal-window {
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00ffff;
+      border-radius: 8px;
+      margin: 30px 0;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: #001111;
+      padding: 10px 15px;
+      border-bottom: 1px solid #00ffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #27c93f; }
+
+    .terminal-title {
+      color: #00ffff;
+      margin-left: 10px;
+    }
+
+    .terminal-body {
+      padding: 20px;
+      min-height: 120px;
+    }
+
+    .terminal-line {
+      color: #00ff00;
+      margin: 8px 0;
+      animation: fadeIn 0.5s;
+    }
+
+    .prompt {
+      color: #00ffff;
+      margin-right: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Grid de cards */
+    .cyber-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin: 40px 0;
+    }
+
+    @media (max-width: 768px) {
+      .cyber-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cyber-card {
+      background: rgba(0, 10, 20, 0.9);
+      border: 2px solid #00ffff;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      transition: 0.3s;
+    }
+
+    .cyber-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+    }
+
+    .cyber-card h3 {
+      color: #00ffff;
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    /* Skill tree */
+    .skill-node {
+      margin: 15px 0;
+      padding: 12px;
+      background: rgba(0, 255, 255, 0.03);
+      border-left: 4px solid;
+      transition: 0.3s;
+    }
+
+    .skill-node:hover {
+      background: rgba(0, 255, 255, 0.1);
+      padding-left: 20px;
+    }
+
+    .skill-node.legendary { border-color: #ffaa00; }
+    .skill-node.epic { border-color: #aa00ff; }
+    .skill-node.rare { border-color: #00aaff; }
+
+    .skill-name {
+      display: block;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 8px;
+    }
+
+    .skill-bar-cyber {
+      width: 100%;
+      height: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #00ffff;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      animation: fillBar 1s ease-out;
+    }
+
+    @keyframes fillBar {
+      from { width: 0; }
+    }
+
+    .skill-value {
+      color: white;
+      font-size: 11px;
+    }
+
+    /* Missões */
+    .mission-item {
+      margin: 15px 0;
+      padding: 15px;
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid #00ffff;
+    }
+
+    .mission-name {
+      color: #ff00ff;
+      font-size: 1.2rem;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .mission-company {
+      color: #00ffff;
+      margin: 5px 0;
+    }
+
+    .mission-objectives {
+      margin: 10px 0;
+      padding-left: 20px;
+      color: white;
+    }
+
+    .mission-xp {
+      color: #00ff00;
+      text-align: right;
+    }
+
+    /* Conquistas */
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .achievement-item {
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .achievement-item:hover {
+      transform: scale(1.05);
+    }
+
+    .achievement-icon {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+
+    /* Botão hacker */
+    .hack-prompt {
+      text-align: center;
+      margin: 60px 0;
+      padding: 40px;
+      border: 2px solid #ff00ff;
+      background: rgba(255, 0, 255, 0.05);
+      box-shadow: 0 0 40px rgba(255, 0, 255, 0.3);
+    }
+
+    .glitch-text {
+      font-size: 1.8rem;
+      color: #ff00ff;
+      animation: glitch 3s infinite;
+      margin-bottom: 30px;
+    }
+
+    .cyber-button {
+      background: transparent;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .cyber-button:hover {
+      background: #00ffff;
+      color: #000;
+      box-shadow: 0 0 50px #00ffff;
+      transform: scale(1.05);
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .contact-link {
+      color: #00ffff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid #00ffff;
+      transition: 0.3s;
+    }
+
+    .contact-link:hover {
+      background: #00ffff;
+      color: #000;
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div class="scanline"></div>
-  <div class="container">
-    <h1 class="glitch">TADASHI SUTO</h1>
-    
-    <div class="terminal">
-      <div class="line">> INICIALIZANDO SISTEMA...</div>
-      <div class="line">> CARREGANDO PERFIL DO NETRUNNER...</div>
-      <div class="line">> CONEXÃO ESTABELECIDA</div>
-      <div class="line">> BEM-VINDO, TADASHI JR</div>
-      <div class="line">> NÍVEL 42 | BUSINESS PARTNER | PRODUCT OWNER</div>
-    </div>
+  <div id="root"></div>
 
-    <button class="button" onclick="hackear()">[ HACK THE SYSTEM ]</button>
+  <script type="text/babel">
+    // Dados
+    const skills = [
+      { name: 'PRODUCT OWNER', level: 95, type: 'legendary', description: '🎯 Priorização • Visão de produto • ROI' },
+      { name: 'GESTÃO DE PROJETOS', level: 92, type: 'legendary', description: '📊 Sprints • Prazos • Recursos' },
+      { name: 'INTEGRAÇÕES', level: 88, type: 'epic', description: '🔌 APIs • Aéreas • Hotéis • Backoffices' },
+      { name: 'UX RESEARCH', level: 82, type: 'rare', description: '🧠 Pós-graduação • Prototipação' },
+      { name: 'LIDERANÇA', level: 90, type: 'epic', description: '👥 Gestão de equipes • Mentoria' }
+    ];
 
-    <div id="conteudo" class="content hidden">
-      <h2 style="color: #ff00ff; margin-bottom: 20px;">⚡ DADOS CLASSIFICADOS ⚡</h2>
-      <p>> Experiência: AVIPAM | Lemontech | Ultracenter | Teleperformance | Sitel</p>
-      <p>> Formação: Pós em UX (Anhembi Morumbi) | Gestão de TI (Fundetec)</p>
-      <p>> Habilidades: Product Owner | Gestão de Projetos | Integrações | UX | Liderança</p>
-      <p>> Conquistas: Construtor de Pontes | Mestre das Sprints | Hacker Financeiro</p>
-      <p>> Linkedin: <a href="https://www.linkedin.com/in/tadashi-suto/" style="color: #00ffff;">/in/tadashi-suto</a></p>
-    </div>
-  </div>
+    const missions = [
+      { name: 'BUSINESS PARTNER', company: 'AVIPAM', period: '2025-', xp: 3000, objectives: ['Conectar tech & negócio', 'Planejar roadmaps'] },
+      { name: 'GERENTE DE PROJETOS', company: 'Lemontech', period: '2022-2025', xp: 2500, objectives: ['Produto de despesas', 'Integrações complexas'] },
+      { name: 'PRODUCT OWNER', company: 'Lemontech', period: '2018-2022', xp: 1000, objectives: ['Backlog', 'Prototipação', 'Sprints'] }
+    ];
 
-  <script>
-    function hackear() {
-      document.getElementById('conteudo').classList.remove('hidden');
-      alert('🔓 ACESSO CONCEDIDO - BEM-VINDO AO MAINFRAME');
+    const achievements = [
+      { name: '🌉 CONSTRUTOR DE PONTES', rarity: 'LENDÁRIO', icon: '🔌', color: '#ffaa00' },
+      { name: '⚡ MESTRE DOS SPRINTS', rarity: 'ÉPICO', icon: '📊', color: '#aa00ff' },
+      { name: '🧠 ARQUITETO NEURAL', rarity: 'RARO', icon: '🎨', color: '#00aaff' },
+      { name: '💳 HACKER FINANCEIRO', rarity: 'ÉPICO', icon: '💰', color: '#00ffaa' }
+    ];
+
+    // Componente Header
+    function CyberHeader() {
+      const [time, setTime] = React.useState(new Date());
+      
+      React.useEffect(() => {
+        const timer = setInterval(() => setTime(new Date()), 1000);
+        return () => clearInterval(timer);
+      }, []);
+
+      return (
+        <header className="cyber-header">
+          <div className="glitch-container">
+            <h1 className="glitch" data-text="TADASHI SUTO">TADASHI SUTO</h1>
+          </div>
+          
+          <div className="status-bar">
+            <div className="status-item"><span className="status-led red"></span><span className="neon-text">LIVE</span></div>
+            <div className="status-item"><span className="status-led green"></span><span className="neon-text">LVL 42</span></div>
+            <div className="status-item"><span className="status-led blue"></span><span className="neon-text">SYNC</span></div>
+            <div className="status-item"><span className="neon-text">{time.toLocaleTimeString()}</span></div>
+          </div>
+
+          <div className="title-container">
+            <h2 className="cyber-title">[ BUSINESS PARTNER ]</h2>
+            <h2 className="cyber-title">[ PRODUCT OWNER ]</h2>
+          </div>
+        </header>
+      );
     }
+
+    // Componente Terminal
+    function TerminalWindow({ lines }) {
+      return (
+        <div className="terminal-window">
+          <div className="terminal-header">
+            <span className="terminal-dot red"></span>
+            <span className="terminal-dot yellow"></span>
+            <span className="terminal-dot green"></span>
+            <span className="terminal-title">root@tadashi:~#</span>
+          </div>
+          <div className="terminal-body">
+            {lines.map((line, i) => (
+              <p key={i} className="terminal-line"><span className="prompt">$></span> {line}</p>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // Componente Skill Tree
+    function SkillTree() {
+      return (
+        <div className="cyber-card">
+          <h3>⚡ NEURAL IMPLANTS ⚡</h3>
+          {skills.map(skill => (
+            <div key={skill.name} className={`skill-node ${skill.type}`} title={skill.description}>
+              <span className="skill-name">{skill.name}</span>
+              <div className="skill-bar-cyber">
+                <div className="skill-fill" style={{width: `${skill.level}%`}}>
+                  <span className="skill-value">{skill.level}%</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Componente Missões
+    function Missions() {
+      return (
+        <div className="cyber-card">
+          <h3>🎯 MISSÕES PRINCIPAIS</h3>
+          {missions.map((mission, i) => (
+            <div key={i} className="mission-item">
+              <div className="mission-name">{mission.name}</div>
+              <div className="mission-company">{mission.company} | {mission.period}</div>
+              <ul className="mission-objectives">
+                {mission.objectives.map((obj, j) => <li key={j}>{obj}</li>)}
+              </ul>
+              <div className="mission-xp">+{mission.xp} XP</div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Componente Conquistas
+    function Achievements() {
+      return (
+        <div className="cyber-card">
+          <h3>🏆 CONQUISTAS</h3>
+          <div className="achievement-grid">
+            {achievements.map((ach, i) => (
+              <div key={i} className="achievement-item" style={{borderColor: ach.color}}>
+                <div className="achievement-icon">{ach.icon}</div>
+                <div style={{fontSize: '0.8rem'}}>{ach.name}</div>
+                <div style={{fontSize: '0.7rem', color: ach.color}}>{ach.rarity}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // Componente Contato
+    function Contact() {
+      return (
+        <div className="cyber-card">
+          <h3>📡 CONEXÕES</h3>
+          <div className="contact-links">
+            <a href="https://www.linkedin.com/in/tadashi-suto/" target="_blank" className="contact-link">LINKEDIN</a>
+            <a href="https://github.com/tadashijr" target="_blank" className="contact-link">GITHUB</a>
+            <a href="mailto:tadashi.suto@gmail.com" className="contact-link">EMAIL</a>
+          </div>
+          <div style={{textAlign: 'center', marginTop: '20px'}}>
+            <p>ID: T4D4SH1_42 | CORP: AVIPAM/LEMONTECH</p>
+          </div>
+        </div>
+      );
+    }
+
+    // Componente Principal App
+    function App() {
+      const [hacked, setHacked] = React.useState(false);
+      const [terminalLines, setTerminalLines] = React.useState([
+        'INICIALIZANDO SISTEMA...',
+        'CARREGANDO PERFIL DO NETRUNNER...',
+        'CONEXÃO ESTABELECIDA',
+        `BEM-VINDO, TADASHI SUTO - ID: ${Math.floor(100 + Math.random() * 900)}`,
+        'NÍVEL DE ACESSO: BUSINESS PARTNER'
+      ]);
+
+      React.useEffect(() => {
+        const interval = setInterval(() => {
+          setTerminalLines(prev => {
+            const newLines = [
+              ...prev.slice(-4),
+              `${new Date().toLocaleTimeString()} - SYNC: ${Math.floor(90 + Math.random() * 10)}%`
+            ];
+            return newLines;
+          });
+        }, 6000);
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <div className="cyberpunk-wrapper">
+          <div className="scanline"></div>
+          <div className="crt-effect"></div>
+          <div className="matrix-rain"></div>
+          
+          <main className="cyber-main">
+            <CyberHeader />
+            <TerminalWindow lines={terminalLines} />
+            
+            <div className="cyber-grid">
+              <SkillTree />
+              <Missions />
+              <Achievements />
+              <Contact />
+            </div>
+
+            {!hacked ? (
+              <div className="hack-prompt">
+                <p className="glitch-text">⛔ ACESSO RESTRITO - NÍVEL DE SEGURANÇA: ALTO</p>
+                <button className="cyber-button" onClick={() => setHacked(true)}>
+                  [ HACK THE SYSTEM ]
+                </button>
+              </div>
+            ) : (
+              <div style={{textAlign: 'center', margin: '40px 0', animation: 'fadeIn 1s'}}>
+                <h2 style={{color: '#ff00ff', fontSize: '2rem'}}>🔓 ACESSO CONCEDIDO</h2>
+                <p style={{color: '#00ffff', margin: '20px'}}>Bem-vindo ao mainframe, netrunner.</p>
+              </div>
+            )}
+          </main>
+        </div>
+      );
+    }
+
+    // Renderizar o App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 </html>
