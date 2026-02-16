@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tadashi Suto - Cyberpunk CV</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a0f; color: #00ffff; font-family: 'Courier New', monospace; overflow: hidden; }
+    .container { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+    .glitch { font-size: 3rem; text-align: center; animation: glitch 3s infinite; margin-bottom: 20px; }
+    @keyframes glitch { 0% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; } 50% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; } }
+    .terminal { border: 2px solid #00ffff; padding: 30px; max-width: 600px; width: 100%; box-shadow: 0 0 30px #00ffff; }
+    .line { margin: 10px 0; border-right: 2px solid #00ffff; white-space: nowrap; overflow: hidden; animation: typing 3s steps(40) 1s forwards, blink 1s infinite; width: 0; }
+    @keyframes typing { from { width: 0; } to { width: 100%; } }
+    @keyframes blink { 50% { border-color: transparent; } }
+    .button { margin-top: 30px; padding: 15px 40px; border: 2px solid #ff00ff; background: transparent; color: #ff00ff; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
+    .button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 30px #ff00ff; }
+    .hidden { display: none; }
+    .content { margin-top: 30px; padding: 20px; border: 1px solid #00ffff; background: rgba(0,255,255,0.1); }
+    .scanline { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 50%, rgba(0,255,255,0.03) 50%); background-size: 100% 4px; pointer-events: none; animation: scan 8s linear infinite; }
+    @keyframes scan { from { background-position: 0 0; } to { background-position: 0 100%; } }
+  </style>
+</head>
+<body>
+  <div class="scanline"></div>
+  <div class="container">
+    <h1 class="glitch">TADASHI SUTO</h1>
+    
+    <div class="terminal">
+      <div class="line">> INICIALIZANDO SISTEMA...</div>
+      <div class="line">> CARREGANDO PERFIL DO NETRUNNER...</div>
+      <div class="line">> CONEXÃO ESTABELECIDA</div>
+      <div class="line">> BEM-VINDO, TADASHI JR</div>
+      <div class="line">> NÍVEL 42 | BUSINESS PARTNER | PRODUCT OWNER</div>
+    </div>
+
+    <button class="button" onclick="hackear()">[ HACK THE SYSTEM ]</button>
+
+    <div id="conteudo" class="content hidden">
+      <h2 style="color: #ff00ff; margin-bottom: 20px;">⚡ DADOS CLASSIFICADOS ⚡</h2>
+      <p>> Experiência: AVIPAM | Lemontech | Ultracenter | Teleperformance | Sitel</p>
+      <p>> Formação: Pós em UX (Anhembi Morumbi) | Gestão de TI (Fundetec)</p>
+      <p>> Habilidades: Product Owner | Gestão de Projetos | Integrações | UX | Liderança</p>
+      <p>> Conquistas: Construtor de Pontes | Mestre das Sprints | Hacker Financeiro</p>
+      <p>> Linkedin: <a href="https://www.linkedin.com/in/tadashi-suto/" style="color: #00ffff;">/in/tadashi-suto</a></p>
+    </div>
+  </div>
+
+  <script>
+    function hackear() {
+      document.getElementById('conteudo').classList.remove('hidden');
+      alert('🔓 ACESSO CONCEDIDO - BEM-VINDO AO MAINFRAME');
+    }
+  </script>
+</body>
+</html>
